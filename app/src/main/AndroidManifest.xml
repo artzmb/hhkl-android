@@ -35,5 +35,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".FixtureActivity" />
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="4e8050516b6f55d9fafbf0c0bba65f2800fe24a0" />
     </application>
 </manifest>
