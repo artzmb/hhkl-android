@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/standings_height"
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp"
+    android:background="@android:color/white"
+    android:gravity="center_vertical"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/position"
+        android:layout_width="@dimen/standings_entry_width"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:text="1"
+        />
+
+    <TextView
+        android:id="@+id/player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/position"
+        android:layout_toEndOf="@id/position"
+        android:singleLine="true"
+        tools:text="Эсмеральда"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/player"
+        android:layout_toEndOf="@id/player"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="right|end"
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded">
+
+        <TextView
+            android:id="@+id/played"
+            android:layout_width="@dimen/standings_entry_width"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            tools:text="30"
+            />
+
+        <TextView
+            android:id="@+id/wins"
+            android:layout_width="@dimen/standings_entry_width"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            tools:text="16"
+            />
+
+        <TextView
+            android:id="@+id/overtime_wins"
+            android:layout_width="@dimen/standings_entry_width"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            tools:text="5"
+            />
+
+        <TextView
+            android:id="@+id/overtime_losses"
+            android:layout_width="@dimen/standings_entry_width"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            tools:text="4"
+            />
+
+        <TextView
+            android:id="@+id/losses"
+            android:layout_width="@dimen/standings_entry_width"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            tools:text="5"
+            />
+
+        <TextView
+            android:id="@+id/goals_difference"
+            android:layout_width="@dimen/standings_entry_width"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            tools:text="104"
+            />
+
+        <TextView
+            android:id="@+id/points"
+            android:layout_width="@dimen/standings_entry_width"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            tools:text="62"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

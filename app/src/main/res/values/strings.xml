@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">2nd H&amp;H Kicker League</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_fixture">Fixture</string>
+    <string name="nav_table">Table</string>
+    <string name="nav_players">Players</string>
+
+    <string name="label_fixture">Fixture</string>
+    <string name="label_table">Table</string>
+    <string name="label_players">Players</string>
+
+    <string name="tab_day">Day</string>
+    <string name="prematch">Prematch</string>
+    <string name="start_match">Start Match</string>
+    <string name="standings_played">P</string>
+    <string name="standings_wins">W</string>
+    <string name="standings_overtime_wins">WO</string>
+    <string name="standings_overtime_losses">LO</string>
+    <string name="standings_losses">L</string>
+    <string name="standings_goals_difference">GD</string>
+    <string name="standings_points">PTS</string>
+
+    <string-array name="leagues">
+        <item>League 1</item>
+        <item>League 2</item>
+    </string-array>
+
+    <string-array name="standings">
+        <item>Brief</item>
+        <item>Yellow</item>
+        <item>Red</item>
+        <item>Next 5</item>
+        <item>Form</item>
+    </string-array>
+</resources>
