@@ -7,7 +7,16 @@ import java.util.ArrayList;
 
 public class Day implements Parcelable {
 
+    private int number;
     private ArrayList<Match> matches = new ArrayList<>();
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
     public ArrayList<Match> getMatches() {
         return matches;
@@ -25,6 +34,7 @@ public class Day implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.number);
         dest.writeTypedList(matches);
     }
 
@@ -32,10 +42,11 @@ public class Day implements Parcelable {
     }
 
     protected Day(Parcel in) {
+        this.number = in.readInt();
         this.matches = in.createTypedArrayList(Match.CREATOR);
     }
 
-    public static final Parcelable.Creator<Day> CREATOR = new Parcelable.Creator<Day>() {
+    public static final Creator<Day> CREATOR = new Creator<Day>() {
         public Day createFromParcel(Parcel source) {
             return new Day(source);
         }
