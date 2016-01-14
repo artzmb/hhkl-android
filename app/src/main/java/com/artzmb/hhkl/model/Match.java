@@ -6,6 +6,7 @@ import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.net.IDN;
 
 public class Match implements Parcelable {
 
@@ -16,6 +17,7 @@ public class Match implements Parcelable {
     public static final int STATUS_RUNNING= 1;
     public static final int STATUS_COMPLETED = 2;
 
+    private int id;
     private Player yellow;
     private Player red;
     private Score score;
@@ -64,6 +66,14 @@ public class Match implements Parcelable {
         return periodsWon;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Player getYellow() {
         return yellow;
     }
@@ -105,6 +115,7 @@ public class Match implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
         dest.writeParcelable(this.yellow, 0);
         dest.writeParcelable(this.red, 0);
         dest.writeParcelable(this.score, 0);
@@ -113,6 +124,7 @@ public class Match implements Parcelable {
 
     @SuppressWarnings("ResourceType")
     protected Match(Parcel in) {
+        this.id = in.readInt();
         this.yellow = in.readParcelable(Player.class.getClassLoader());
         this.red = in.readParcelable(Player.class.getClassLoader());
         this.score = in.readParcelable(Score.class.getClassLoader());
@@ -128,4 +140,17 @@ public class Match implements Parcelable {
             return new Match[size];
         }
     };
+
+    @Override
+    public String toString() {
+        if (yellow != null && red != null) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.format("%s - %s", yellow.getName(), red.getName()));
+            if (status != STATUS_IDLE) {
+                sb.append(String.format(" - %d:%d", getPeriodsWonByYellow(), getPeriodsWonByRed()));
+            }
+            return sb.toString();
+        }
+        return super.toString();
+    }
 }

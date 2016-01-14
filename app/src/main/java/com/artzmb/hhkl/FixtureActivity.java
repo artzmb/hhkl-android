@@ -16,6 +16,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -74,25 +76,29 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
             Fabric.with(this, new Crashlytics());
         }
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        mApi = retrofit.create(Api.class);
-
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.pages);
         mSpinnerLeague = (Spinner) findViewById(R.id.spinner_league);
         mViewFlipper = (ViewFlipper) findViewById(R.id.flipper);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
 
+        setupApi();
         setupSpinner();
         setupSwipeRefreshLayout();
+        setupViewFlipper();
     }
 
     @Override
     protected int provideContentViewLayoutResourceId() {
         return R.layout.activity_fixture;
+    }
+
+    private void setupApi() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Config.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        mApi = retrofit.create(Api.class);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -103,6 +109,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
         mSpinnerLeague.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mViewFlipper.setDisplayedChild(VIEW_LOADING);
                 requestFixture(position + 1);
             }
 
@@ -130,8 +137,10 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
+    private void setupViewFlipper() {
+    }
+
     private void requestFixture(int leagueLevel) {
-        mViewFlipper.setDisplayedChild(VIEW_LOADING);
         Call<DaysEntity> call = mApi.getMatches(leagueLevel);
         call.enqueue(new Callback<DaysEntity>() {
             @Override

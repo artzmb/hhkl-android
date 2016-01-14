@@ -8,10 +8,20 @@
     tools:context="com.artzmb.hhkl.PlayersActivity"
     tools:showIn="@layout/activity_fixture">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/players"
+    <ViewFlipper
+        android:id="@+id/flipper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
+
+        <include layout="@layout/loading" />
+        <include layout="@layout/error" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/players"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </ViewFlipper>
 
 </RelativeLayout>

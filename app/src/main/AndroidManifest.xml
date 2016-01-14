@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.artzmb.hhkl">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,31 +13,49 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".FixtureActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".TableActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".FixtureActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FixtureActivity" />
+        </activity>
+        <activity
+            android:name=".PlayersActivity"
+            android:parentActivityName=".FixtureActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".FixtureActivity" />
         </activity>
 
-        <activity
-            android:name=".PlayersActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FixtureActivity" />
-        </activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="4e8050516b6f55d9fafbf0c0bba65f2800fe24a0" />
+
+        <activity
+            android:name=".MatchActivity"
+            android:parentActivityName=".FixtureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.artzmb.hhkl.FixtureActivity" />
+        </activity>
     </application>
+
 </manifest>

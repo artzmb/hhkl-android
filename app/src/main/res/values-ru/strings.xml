@@ -9,7 +9,7 @@
     <string name="nav_table">Таблица</string>
     <string name="navigation_drawer_close">Закрыть боковое меню</string>
     <string name="navigation_drawer_open">Открыть боковое меню</string>
-    <string name="prematch">Не начат</string>
+    <string name="prematch">Не начался</string>
     <string name="standings_goals_difference">РГ</string>
     <string name="standings_losses">П</string>
     <string name="standings_overtime_losses">ПО</string>
@@ -30,4 +30,16 @@
         <item>Желтые</item>
         <item>Красные</item>
     </string-array>
+
+    <string name="new_match_dialog_message">Вы действительно хотите начать матч?</string>
+    <string name="new_match_dialog_positive">Начать</string>
+    <string name="new_match_dialog_negative">Отмена</string>
+    <string name="wrong_score">Неправильный счет</string>
+    <string name="first_period">Первый период</string>
+    <string name="second_period">Второй период</string>
+    <string name="overtime">Овертайм</string>
+    <string name="cancel_match_dialog_message">Вы действительно хотите остановить матч?</string>
+    <string name="cancel_match_dialog_positive">Остановить</string>
+    <string name="match_already_completed">Матч уже закончен</string>
+    <string name="day_has_not_started_yet">Тур еще не начался</string>
 </resources>

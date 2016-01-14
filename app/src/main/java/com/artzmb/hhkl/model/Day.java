@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Day implements Parcelable {
 
     private int number;
+    private boolean active;
     private ArrayList<Match> matches = new ArrayList<>();
 
     public int getNumber() {
@@ -16,6 +17,14 @@ public class Day implements Parcelable {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public ArrayList<Match> getMatches() {
@@ -35,6 +44,7 @@ public class Day implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.number);
+        dest.writeByte(active ? (byte) 1 : (byte) 0);
         dest.writeTypedList(matches);
     }
 
@@ -43,6 +53,7 @@ public class Day implements Parcelable {
 
     protected Day(Parcel in) {
         this.number = in.readInt();
+        this.active = in.readByte() != 0;
         this.matches = in.createTypedArrayList(Match.CREATOR);
     }
 

@@ -1,6 +1,9 @@
 package com.artzmb.hhkl.utils;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.artzmb.hhkl.MatchActivity;
 import com.artzmb.hhkl.R;
 import com.artzmb.hhkl.model.Match;
 import com.squareup.picasso.Picasso;
@@ -25,6 +30,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
 
     private Context mContext;
     private List<Match> mMatches;
+    private boolean mActive;
 
     public MatchesAdapter(Context context) {
         this.mContext = context;
@@ -42,12 +48,13 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         holder.mLinearlayoutWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (match.getStatus() == Match.STATUS_IDLE) {
-                    holder.mButtonStartMatch.setVisibility(holder.mButtonStartMatch.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                    holder.mRelativeLayoutDetails.setVisibility(View.GONE);
+                if (mActive) {
+                    mContext.startActivity(MatchActivity.createIntent(mContext, match));
                 } else {
-                    holder.mRelativeLayoutDetails.setVisibility(holder.mRelativeLayoutDetails.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                    holder.mButtonStartMatch.setVisibility(View.GONE);
+                    Toast.makeText(
+                            mContext,
+                            mContext.getString(R.string.day_has_not_started_yet),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -63,8 +70,6 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         holder.mTextViewRedScore.setText(String.valueOf(match.getPeriodsWonByRed()));
         holder.mTextViewYellowAlias.setText(match.getYellow().getName());
         holder.mTextViewRedAlias.setText(match.getRed().getName());
-        holder.mTextViewYellowName.setText(match.getYellow().getName());
-        holder.mTextViewRedName.setText(match.getRed().getName());
         if (match.getStatus() == Match.STATUS_IDLE) {
             holder.mViewFlipperScore.setDisplayedChild(VIEW_PREMATCH);
         } else {
@@ -81,6 +86,10 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         mMatches = matches;
     }
 
+    public void setActive(boolean active) {
+        mActive = active;
+    }
+
     class MatchViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
@@ -91,11 +100,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         TextView mTextViewRedScore;
         TextView mTextViewYellowAlias;
         TextView mTextViewRedAlias;
-        TextView mTextViewYellowName;
-        TextView mTextViewRedName;
         ViewFlipper mViewFlipperScore;
-        RelativeLayout mRelativeLayoutDetails;
-        Button mButtonStartMatch;
 
         public MatchViewHolder(View itemView) {
             super(itemView);
@@ -107,11 +112,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
             mTextViewRedScore = (TextView) itemView.findViewById(R.id.score_red);
             mTextViewYellowAlias = (TextView) itemView.findViewById(R.id.alias_yellow);
             mTextViewRedAlias = (TextView) itemView.findViewById(R.id.alias_red);
-            mTextViewYellowName = (TextView) itemView.findViewById(R.id.name_yellow);
-            mTextViewRedName = (TextView) itemView.findViewById(R.id.name_red);
             mViewFlipperScore = (ViewFlipper) itemView.findViewById(R.id.flipper_score);
-            mRelativeLayoutDetails = (RelativeLayout) itemView.findViewById(R.id.details);
-            mButtonStartMatch = (Button) itemView.findViewById(R.id.start_match);
         }
     }
 }

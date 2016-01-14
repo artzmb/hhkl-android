@@ -21,7 +21,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.PlayerVi
     private List<Player> mPlayers;
 
     public PlayersAdapter(Context context) {
-        this.mContext = context;
+        this.mContext = context.getApplicationContext();
     }
 
     @Override
