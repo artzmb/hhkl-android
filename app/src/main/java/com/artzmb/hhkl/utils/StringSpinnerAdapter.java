@@ -16,8 +16,19 @@ public class StringSpinnerAdapter extends BaseAdapter {
     private List<String> mItems = new ArrayList<>();
     private Context context;
 
+    private int selectedLayoutId = R.layout.toolbar_spinner_item_actionbar;
+    private int dropdownLayoutId = R.layout.toolbar_spinner_item_dropdown;
+
     public StringSpinnerAdapter(Context context) {
         this.context = context;
+    }
+
+    public void setSelectedLayoutId(int selectedLayoutId) {
+        this.selectedLayoutId = selectedLayoutId;
+    }
+
+    public void setDropdownLayoutId(int dropdownLayoutId) {
+        this.dropdownLayoutId = dropdownLayoutId;
     }
 
     public void clear() {
@@ -50,7 +61,7 @@ public class StringSpinnerAdapter extends BaseAdapter {
     @Override
     public View getDropDownView(int position, View view, ViewGroup parent) {
         if (view == null || !view.getTag().toString().equals("DROPDOWN")) {
-            view = LayoutInflater.from(context).inflate(R.layout.toolbar_spinner_item_dropdown, parent, false);
+            view = LayoutInflater.from(context).inflate(dropdownLayoutId, parent, false);
             view.setTag("DROPDOWN");
         }
 
@@ -63,8 +74,7 @@ public class StringSpinnerAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         if (view == null || !view.getTag().toString().equals("NON_DROPDOWN")) {
-            view = LayoutInflater.from(context).inflate(R.layout.
-                    toolbar_spinner_item_actionbar, parent, false);
+            view = LayoutInflater.from(context).inflate(selectedLayoutId, parent, false);
             view.setTag("NON_DROPDOWN");
         }
         TextView textView = (TextView) view.findViewById(android.R.id.text1);

@@ -14,13 +14,14 @@ import com.artzmb.hhkl.model.Player;
 import com.artzmb.hhkl.model.StandingsLine;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StandingsAdapter extends RecyclerView.Adapter<StandingsAdapter.LineViewHolder> {
 
     private Context mContext;
     private float mDensity;
-    private List<StandingsLine> mLines;
+    private List<StandingsLine> mLines = new ArrayList<>();
 
     public StandingsAdapter(Context context) {
         this.mContext = context;
@@ -59,6 +60,7 @@ public class StandingsAdapter extends RecyclerView.Adapter<StandingsAdapter.Line
 
     public void setItems(List<StandingsLine> lines) {
         mLines = lines;
+        notifyDataSetChanged();
     }
 
     class LineViewHolder extends RecyclerView.ViewHolder {

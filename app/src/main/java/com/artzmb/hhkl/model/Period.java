@@ -8,6 +8,11 @@ public class Period implements Parcelable {
     private int yellowGoals;
     private int redGoals;
 
+    public Period(int yellowGoals, int redGoals) {
+        this.yellowGoals = yellowGoals;
+        this.redGoals = redGoals;
+    }
+
     public int getYellowGoals() {
         return yellowGoals;
     }

@@ -1,6 +1,7 @@
 package com.artzmb.hhkl;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,26 +10,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.artzmb.hhkl.api.Api;
+import com.artzmb.hhkl.entity.DaysEntity;
+import com.artzmb.hhkl.entity.StandingsEntity;
 import com.artzmb.hhkl.model.Schedule;
 import com.artzmb.hhkl.model.StandingsLine;
+import com.artzmb.hhkl.utils.Config;
+import com.artzmb.hhkl.utils.DataMapper;
 import com.artzmb.hhkl.utils.DividerItemDecoration;
 import com.artzmb.hhkl.utils.StandingsAdapter;
 
 import java.util.List;
 
-public class StandingsFragment extends Fragment {
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
-    private static final String EXTRA_SCHEDULE = "com.artzmb.hhkl.extra_schedule";
-    private Schedule mSchedule;
+public class StandingsFragment extends Fragment implements TableActivity.OnRequestListener {
+
+    private static final String EXTRA_TYPE = "com.artzmb.hhkl.extra_type";
+
+    private String mTableType;
     private List<StandingsLine> mLines;
 
     RecyclerView mRecyclerViewStandings;
 
     private StandingsAdapter mStandingsAdapter;
+    private Api mApi;
 
-    public static StandingsFragment newInstance(Schedule schedule) {
+    public static StandingsFragment newInstance(@Api.TableType String tableType) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_SCHEDULE, schedule);
+        bundle.putString(EXTRA_TYPE, tableType);
         StandingsFragment fragment = new StandingsFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -38,8 +52,9 @@ public class StandingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSchedule = getArguments().getParcelable(EXTRA_SCHEDULE);
-        mLines = MockDataGenerator.generateStandings();
+        mTableType = getArguments().getString(EXTRA_TYPE);
+
+        setupApi();
     }
 
     @Nullable
@@ -47,18 +62,72 @@ public class StandingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_standings, container, false);
         mRecyclerViewStandings = (RecyclerView) v.findViewById(R.id.standings);
-        setupMatches();
+        mRecyclerViewStandings.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerViewStandings.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mStandingsAdapter = new StandingsAdapter(getContext());
+        mRecyclerViewStandings.setAdapter(mStandingsAdapter);
         return v;
     }
 
-    private void setupMatches() {
-        if (mSchedule != null) {
-
-            mStandingsAdapter = new StandingsAdapter(getContext());
-            mRecyclerViewStandings.setLayoutManager(new LinearLayoutManager(getContext()));
-            mRecyclerViewStandings.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-            mRecyclerViewStandings.setAdapter(mStandingsAdapter);
-            mStandingsAdapter.setItems(mLines);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() instanceof TableActivity) {
+            ((TableActivity) getActivity()).registerListener(this);
+            if (mLines == null || mLines.isEmpty()) {
+                requestStandings(((TableActivity) getActivity()).getLeagueLevel());
+            }
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (getActivity() instanceof TableActivity) {
+            ((TableActivity) getActivity()).unregisterListener(this);
+        }
+    }
+
+    @Override
+    public void onRequest(int leagueLevel) {
+        requestStandings(leagueLevel);
+    }
+
+    private void setupApi() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Config.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        mApi = retrofit.create(Api.class);
+    }
+
+    private void requestStandings(int leagueLevel) {
+        Call<StandingsEntity> call = mApi.getTable(leagueLevel, mTableType);
+        call.enqueue(new Callback<StandingsEntity>() {
+            @Override
+            public void onResponse(final Response<StandingsEntity> response, Retrofit retrofit) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLines = DataMapper.transform(response.body());
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setupMatches();
+                            }
+                        }, 100);
+                    }
+                }).run();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
+    private void setupMatches() {
+        mStandingsAdapter.setItems(mLines);
     }
 }

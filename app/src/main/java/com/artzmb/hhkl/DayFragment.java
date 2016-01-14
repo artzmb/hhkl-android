@@ -52,6 +52,7 @@ public class DayFragment extends Fragment {
             mRecyclerViewMatches.setLayoutManager(new LinearLayoutManager(getContext()));
             mRecyclerViewMatches.setAdapter(mMatchesAdapter);
             mMatchesAdapter.setItems(mDay.getMatches());
+            mMatchesAdapter.setActive(mDay.isActive());
         }
     }
 }
