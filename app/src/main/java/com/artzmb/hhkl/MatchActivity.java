@@ -95,7 +95,7 @@ public class MatchActivity extends AppCompatActivity implements PeriodsAdapter.O
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMatch.getStatus() == Match.STATUS_COMPLETED) {
+                if (mMatch.getStatus() == Match.STATUS_COMPLETED || mMatch.getStatus() == Match.STATUS_APPROVED) {
                     Toast.makeText(MatchActivity.this, getString(R.string.match_already_completed), Toast.LENGTH_SHORT).show();
                 } else {
                     int messageId = mMatch.getStatus() == Match.STATUS_IDLE ? R.string.new_match_dialog_message : R.string.cancel_match_dialog_message;

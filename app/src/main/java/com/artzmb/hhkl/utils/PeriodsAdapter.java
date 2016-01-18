@@ -64,7 +64,7 @@ public class PeriodsAdapter extends RecyclerView.Adapter<PeriodsAdapter.PeriodVi
         if (position == PERIODS - 1) {
             holder.mViewConnector.setVisibility(View.GONE);
         }
-        if (mMatch.getStatus() == Match.STATUS_COMPLETED &&
+        if ((mMatch.getStatus() == Match.STATUS_COMPLETED || mMatch.getStatus() == Match.STATUS_APPROVED) &&
                 (mMatch.getScore().getPeriods().size() - 1) < position) {
             holder.mView.setVisibility(View.GONE);
         } else {
@@ -121,7 +121,7 @@ public class PeriodsAdapter extends RecyclerView.Adapter<PeriodsAdapter.PeriodVi
                     }
                 }
             });
-            if (mMatch.getStatus() == Match.STATUS_COMPLETED &&
+            if ((mMatch.getStatus() == Match.STATUS_COMPLETED || mMatch.getStatus() == Match.STATUS_APPROVED) &&
                     (mMatch.getScore().getPeriods().size() - 1) < (position + 1)) {
                 holder.mViewConnector.setVisibility(View.GONE);
             }

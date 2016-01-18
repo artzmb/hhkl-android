@@ -31,6 +31,8 @@
         <item>Красные</item>
     </string-array>
 
+    <string name="action_settings">Настройки</string>
+    <string name="vs">vs</string>
     <string name="new_match_dialog_message">Вы действительно хотите начать матч?</string>
     <string name="new_match_dialog_positive">Начать</string>
     <string name="new_match_dialog_negative">Отмена</string>

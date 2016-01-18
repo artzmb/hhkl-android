@@ -11,11 +11,12 @@ import java.net.IDN;
 public class Match implements Parcelable {
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({STATUS_IDLE, STATUS_RUNNING, STATUS_COMPLETED})
+    @IntDef({STATUS_IDLE, STATUS_RUNNING, STATUS_COMPLETED, STATUS_APPROVED})
     public @interface Status {}
     public static final int STATUS_IDLE = 0;
     public static final int STATUS_RUNNING= 1;
     public static final int STATUS_COMPLETED = 2;
+    public static final int STATUS_APPROVED = 3;
 
     private int id;
     private Player yellow;
