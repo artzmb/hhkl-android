@@ -51,6 +51,8 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
     private PagerAdapter mPagerAdapter;
 
     private Schedule mSchedule;
+    private int mLastActiveDay;
+    private int mLastSelectedDay;
 
     private Api mApi;
 
@@ -102,7 +104,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mViewFlipper.setDisplayedChild(VIEW_LOADING);
-                requestFixture(position + 1);
+                requestFixture(position + 1, false);
             }
 
             @Override
@@ -122,7 +124,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
             mTabLayout.addTab(mTabLayout.newTab());
         }
         mTabLayout.setupWithViewPager(mViewPager);
-
+        mViewPager.setCurrentItem(mLastActiveDay);
     }
 
     private void setupSwipeRefreshLayout() {
@@ -134,12 +136,12 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
             @Override
             public void onClick(View v) {
                 mViewFlipper.setDisplayedChild(VIEW_LOADING);
-                requestFixture(mSpinnerLeague.getSelectedItemPosition() + 1);
+                requestFixture(mSpinnerLeague.getSelectedItemPosition() + 1, false);
             }
         });
     }
 
-    private void requestFixture(int leagueLevel) {
+    private void requestFixture(int leagueLevel, final boolean saveSelectedDay) {
         Call<DaysEntity> call = mApi.getMatches(leagueLevel);
         call.enqueue(new Callback<DaysEntity>() {
             @Override
@@ -148,6 +150,16 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
                     @Override
                     public void run() {
                         mSchedule = DataMapper.transform(response.body());
+                        if (saveSelectedDay) {
+                            mLastActiveDay = mLastSelectedDay;
+                        } else {
+                            for (int i = mSchedule.getDays().size() - 1; i >= 0; i--) {
+                                if (mSchedule.getDays().get(i).isActive()) {
+                                    mLastActiveDay = i;
+                                    break;
+                                }
+                            }
+                        }
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -174,7 +186,8 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
-        requestFixture(mSpinnerLeague.getSelectedItemPosition() + 1);
+        mLastSelectedDay = mTabLayout.getSelectedTabPosition();
+        requestFixture(mSpinnerLeague.getSelectedItemPosition() + 1, true);
     }
 
     private class DayPagerAdapter extends FragmentStatePagerAdapter {
