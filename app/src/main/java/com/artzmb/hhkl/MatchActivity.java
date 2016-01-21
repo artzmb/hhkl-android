@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +27,6 @@ import com.artzmb.hhkl.model.Period;
 import com.artzmb.hhkl.utils.CircleTransformation;
 import com.artzmb.hhkl.utils.Config;
 import com.artzmb.hhkl.utils.PeriodsAdapter;
-import com.squareup.okhttp.ResponseBody;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -244,11 +242,11 @@ public class MatchActivity extends AppCompatActivity implements PeriodsAdapter.O
 
     private void populateContent() {
         Picasso.with(this)
-                .load(R.drawable.monica)
+                .load(R.drawable.placeholder)
                 .transform(new CircleTransformation())
                 .into(mImageViewYellowAvatar);
         Picasso.with(this)
-                .load(R.drawable.monica)
+                .load(R.drawable.placeholder)
                 .transform(new CircleTransformation())
                 .into(mImageViewRedAvatar);
         mTextViewYellowPlayer.setText(mMatch.getYellow().getName());
