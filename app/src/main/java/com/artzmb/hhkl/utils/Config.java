@@ -7,7 +7,7 @@ public class Config {
     public static final int POINTS_FOR_OVERTIME_LOSE = 1;
     public static final int POINTS_FOR_LOSE = 0;
 
-    public static final String API_URL = "http://192.168.2.125:8000";
+    public static final String API_URL = "http://192.168.2.125";
 
     private Config() {}
 }

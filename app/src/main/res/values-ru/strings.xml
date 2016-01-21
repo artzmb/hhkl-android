@@ -42,4 +42,6 @@
     <string name="cancel_match_dialog_positive">Остановить</string>
     <string name="match_already_completed">Матч уже закончен</string>
     <string name="day_has_not_started_yet">Тур еще не начался</string>
+    <string name="network_error">Во время загрузки данных произошла ошибка</string>
+    <string name="refresh">Обновить</string>
 </resources>

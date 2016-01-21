@@ -6,72 +6,95 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/standings_height"
-        android:layout_gravity="right|end"
-        android:gravity="center_vertical|right|end"
-        android:orientation="horizontal"
-        android:paddingRight="8dp"
-        android:paddingLeft="8dp"
-        tools:ignore="RtlHardcoded">
-
-        <TextView
-            android:layout_width="@dimen/standings_entry_width"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/standings_played"
-            />
-
-        <TextView
-            android:layout_width="@dimen/standings_entry_width"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/standings_wins"
-            />
-
-        <TextView
-            android:layout_width="@dimen/standings_entry_width"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/standings_overtime_wins"
-            />
-
-        <TextView
-            android:layout_width="@dimen/standings_entry_width"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/standings_overtime_losses"
-            />
-
-        <TextView
-            android:layout_width="@dimen/standings_entry_width"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/standings_losses"
-            />
-
-        <TextView
-            android:layout_width="@dimen/standings_entry_width"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/standings_goals_difference"
-            />
-
-        <TextView
-            android:layout_width="@dimen/standings_entry_width"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/standings_points"
-            />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/standings"
+    <ViewFlipper
+        android:id="@+id/flipper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackground"
-        />
+        android:layout_height="match_parent">
+
+        <include layout="@layout/loading" />
+        <include layout="@layout/error" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/standings_height"
+                    android:layout_gravity="right|end"
+                    android:gravity="center_vertical|right|end"
+                    android:orientation="horizontal"
+                    android:paddingRight="8dp"
+                    android:paddingLeft="8dp"
+                    tools:ignore="RtlHardcoded">
+
+                    <TextView
+                        android:layout_width="@dimen/standings_entry_width"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/standings_played"
+                        />
+
+                    <TextView
+                        android:layout_width="@dimen/standings_entry_width"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/standings_wins"
+                        />
+
+                    <TextView
+                        android:layout_width="@dimen/standings_entry_width"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/standings_overtime_wins"
+                        />
+
+                    <TextView
+                        android:layout_width="@dimen/standings_entry_width"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/standings_overtime_losses"
+                        />
+
+                    <TextView
+                        android:layout_width="@dimen/standings_entry_width"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/standings_losses"
+                        />
+
+                    <TextView
+                        android:layout_width="@dimen/standings_entry_width"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/standings_goals_difference"
+                        />
+
+                    <TextView
+                        android:layout_width="@dimen/standings_entry_width"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/standings_points"
+                        />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/standings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBackground"
+                    />
+
+            </LinearLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </ViewFlipper>
 
 </LinearLayout>

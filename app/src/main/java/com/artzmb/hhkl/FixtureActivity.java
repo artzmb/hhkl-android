@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,21 +11,14 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.artzmb.hhkl.api.Api;
 import com.artzmb.hhkl.entity.DaysEntity;
-import com.artzmb.hhkl.entity.MatchEntity;
 import com.artzmb.hhkl.model.Schedule;
 import com.artzmb.hhkl.utils.Config;
 import com.artzmb.hhkl.utils.DataMapper;
@@ -43,7 +34,6 @@ import retrofit.Retrofit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -56,6 +46,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
     Spinner mSpinnerLeague;
     ViewFlipper mViewFlipper;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    Button mReloadButton;
 
     private PagerAdapter mPagerAdapter;
 
@@ -81,6 +72,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
         mSpinnerLeague = (Spinner) findViewById(R.id.spinner_league);
         mViewFlipper = (ViewFlipper) findViewById(R.id.flipper);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        mReloadButton = (Button) findViewById(R.id.reload);
 
         setupApi();
         setupSpinner();
@@ -138,6 +130,13 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
     }
 
     private void setupViewFlipper() {
+        mReloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewFlipper.setDisplayedChild(VIEW_LOADING);
+                requestFixture(mSpinnerLeague.getSelectedItemPosition() + 1);
+            }
+        });
     }
 
     private void requestFixture(int leagueLevel) {

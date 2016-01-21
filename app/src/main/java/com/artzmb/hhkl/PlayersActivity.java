@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
@@ -38,6 +39,7 @@ public class PlayersActivity extends BaseActivity {
     RecyclerView mRecyclerViewPlayers;
     Spinner mSpinnerLeague;
     ViewFlipper mViewFlipper;
+    Button mReloadButton;
 
     private List<Player> mPlayers;
     private PlayersAdapter mPlayersAdapter;
@@ -59,22 +61,12 @@ public class PlayersActivity extends BaseActivity {
         mRecyclerViewPlayers = (RecyclerView) findViewById(R.id.players);
         mViewFlipper = (ViewFlipper) findViewById(R.id.flipper);
         mSpinnerLeague = (Spinner) findViewById(R.id.spinner_league);
-        mSpinnerLeague.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mViewFlipper.setDisplayedChild(VIEW_LOADING);
-                requestPlayers(position + 1);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        mReloadButton = (Button) findViewById(R.id.reload);
 
         setupApi();
         setupSpinner();
         setupPlayers();
+        setupViewFlipper();
     }
 
     private void setupApi() {
@@ -87,6 +79,18 @@ public class PlayersActivity extends BaseActivity {
 
     @SuppressWarnings("ConstantConditions")
     private void setupSpinner() {
+        mSpinnerLeague.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mViewFlipper.setDisplayedChild(VIEW_LOADING);
+                requestPlayers(position + 1);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         StringSpinnerAdapter spinnerAdapter = new StringSpinnerAdapter(this);
         spinnerAdapter.addItems(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.leagues))));
         mSpinnerLeague.setAdapter(spinnerAdapter);
@@ -99,6 +103,16 @@ public class PlayersActivity extends BaseActivity {
         mRecyclerViewPlayers.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewPlayers.setAdapter(mPlayersAdapter);
         mPlayersAdapter.setItems(mPlayers);
+    }
+
+    private void setupViewFlipper() {
+        mReloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewFlipper.setDisplayedChild(VIEW_LOADING);
+                requestPlayers(mSpinnerLeague.getSelectedItemPosition() + 1);
+            }
+        });
     }
 
     private void requestPlayers(int leagueLevel) {
