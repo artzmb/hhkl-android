@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.artzmb.hhkl.R;
@@ -34,7 +33,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.PlayerVi
         Player player = mPlayers.get(position);
 
         Picasso.with(holder.mView.getContext())
-                .load(R.drawable.monica)
+                .load(R.drawable.placeholder)
                 .transform(new CircleTransformation())
                 .into(holder.mImageViewAvatar);
         holder.mTextViewName.setText(player.getName());
