@@ -41,11 +41,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".FixtureActivity" />
         </activity>
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="4e8050516b6f55d9fafbf0c0bba65f2800fe24a0" />
-
         <activity
             android:name=".MatchActivity"
             android:parentActivityName=".FixtureActivity"
@@ -56,6 +51,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.artzmb.hhkl.FixtureActivity" />
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".FixtureActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:label="@string/nav_preferences"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FixtureActivity" />
+        </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="4e8050516b6f55d9fafbf0c0bba65f2800fe24a0" />
     </application>
 
 </manifest>

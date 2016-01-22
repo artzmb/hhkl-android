@@ -1,6 +1,5 @@
 package com.artzmb.hhkl;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,8 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-
-import java.util.concurrent.TimeUnit;
 
 public abstract class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -71,6 +68,9 @@ public abstract class BaseActivity extends AppCompatActivity
                         break;
                     case R.id.nav_players:
                         startActivity(PlayersActivity.createIntent(BaseActivity.this));
+                        break;
+                    case R.id.nav_preferences:
+                        startActivity(SettingsActivity.createIntent(BaseActivity.this));
                         break;
                 }
             }

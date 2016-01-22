@@ -22,6 +22,7 @@ import com.artzmb.hhkl.entity.DaysEntity;
 import com.artzmb.hhkl.model.Schedule;
 import com.artzmb.hhkl.utils.Config;
 import com.artzmb.hhkl.utils.DataMapper;
+import com.artzmb.hhkl.utils.PreferencesUtils;
 import com.artzmb.hhkl.utils.StringSpinnerAdapter;
 
 import com.crashlytics.android.Crashlytics;
@@ -89,7 +90,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
 
     private void setupApi() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.API_URL)
+                .baseUrl(PreferencesUtils.getApiUrl(getApplicationContext()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mApi = retrofit.create(Api.class);

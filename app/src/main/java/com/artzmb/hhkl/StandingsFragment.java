@@ -21,6 +21,7 @@ import com.artzmb.hhkl.model.StandingsLine;
 import com.artzmb.hhkl.utils.Config;
 import com.artzmb.hhkl.utils.DataMapper;
 import com.artzmb.hhkl.utils.DividerItemDecoration;
+import com.artzmb.hhkl.utils.PreferencesUtils;
 import com.artzmb.hhkl.utils.StandingsAdapter;
 
 import java.util.List;
@@ -112,7 +113,7 @@ public class StandingsFragment extends Fragment
 
     private void setupApi() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.API_URL)
+                .baseUrl(PreferencesUtils.getApiUrl(getActivity()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mApi = retrofit.create(Api.class);

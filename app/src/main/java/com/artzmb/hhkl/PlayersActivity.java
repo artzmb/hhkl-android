@@ -18,6 +18,7 @@ import com.artzmb.hhkl.utils.Config;
 import com.artzmb.hhkl.utils.DataMapper;
 import com.artzmb.hhkl.utils.DividerItemDecoration;
 import com.artzmb.hhkl.utils.PlayersAdapter;
+import com.artzmb.hhkl.utils.PreferencesUtils;
 import com.artzmb.hhkl.utils.StringSpinnerAdapter;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class PlayersActivity extends BaseActivity {
 
     private void setupApi() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.API_URL)
+                .baseUrl(PreferencesUtils.getApiUrl(getApplicationContext()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mApi = retrofit.create(Api.class);
