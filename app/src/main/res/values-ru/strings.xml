@@ -44,4 +44,14 @@
     <string name="cancel_match_dialog_positive">Остановить</string>
     <string name="match_already_completed">Матч уже закончен</string>
     <string name="day_has_not_started_yet">Тур еще не начался</string>
+    <string name="network_error">Во время загрузки данных произошла ошибка</string>
+    <string name="refresh">Обновить</string>
+    <string name="nav_preferences">Настройки</string>
+    <string name="common_preferences">Общие</string>
+    <string name="pref_title_api_url">Сервер</string>
+    <string name="pref_title_preferred_league">Предпочитаемая лига</string>
+    <string-array name="pref_values_preferred_league">
+        <item>Лига 1</item>
+        <item>Лига 2</item>
+    </string-array>
 </resources>

@@ -27,6 +27,7 @@ import com.artzmb.hhkl.model.Period;
 import com.artzmb.hhkl.utils.CircleTransformation;
 import com.artzmb.hhkl.utils.Config;
 import com.artzmb.hhkl.utils.PeriodsAdapter;
+import com.artzmb.hhkl.utils.PreferencesUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -181,7 +182,7 @@ public class MatchActivity extends AppCompatActivity implements PeriodsAdapter.O
 
     private void setupApi() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.API_URL)
+                .baseUrl(PreferencesUtils.getApiUrl(getApplicationContext()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mApi = retrofit.create(Api.class);

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/common_preferences">
+
+        <com.artzmb.hhkl.utils.EditTextPreference
+            android:key="pref_api_url"
+            android:title="@string/pref_title_api_url"
+            android:summary="%s"
+            android:defaultValue="http://192.168.2.125"
+            />
+
+        <ListPreference
+            android:key="pref_preferred_league"
+            android:title="@string/pref_title_preferred_league"
+            android:entries="@array/pref_values_preferred_league"
+            android:entryValues="@array/pref_values_preferred_league"
+            android:summary="%s"
+            android:defaultValue="1"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>
