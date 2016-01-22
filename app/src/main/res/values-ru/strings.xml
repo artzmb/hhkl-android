@@ -50,6 +50,10 @@
     <string name="common_preferences">Общие</string>
     <string name="pref_title_api_url">Сервер</string>
     <string name="pref_title_preferred_league">Предпочитаемая лига</string>
+    <string-array name="pref_entries_preferred_league">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string-array name="pref_values_preferred_league">
         <item>1</item>
         <item>2</item>
