@@ -12,12 +12,13 @@ import com.artzmb.hhkl.R;
 import com.artzmb.hhkl.model.Player;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.PlayerViewHolder> {
 
     private Context mContext;
-    private List<Player> mPlayers;
+    private List<Player> mPlayers = new ArrayList<>();
 
     public PlayersAdapter(Context context) {
         this.mContext = context.getApplicationContext();

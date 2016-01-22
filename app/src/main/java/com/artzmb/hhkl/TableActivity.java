@@ -17,6 +17,7 @@ import android.widget.ViewFlipper;
 
 import com.artzmb.hhkl.api.Api;
 import com.artzmb.hhkl.model.Schedule;
+import com.artzmb.hhkl.utils.PreferencesUtils;
 import com.artzmb.hhkl.utils.StringSpinnerAdapter;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class TableActivity extends BaseActivity {
     Spinner mSpinnerLeague;
 
     private PagerAdapter mPagerAdapter;
-    private Schedule mSchedule;
+    private int mPreferredLeague;
 
     private List<OnRequestListener> requestListeners = new ArrayList<>();
 
@@ -74,7 +75,7 @@ public class TableActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSchedule = MockDataGenerator.generateSchedule();
+        mPreferredLeague = PreferencesUtils.getPreferredLeague(this);
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.pages);
@@ -103,6 +104,7 @@ public class TableActivity extends BaseActivity {
         StringSpinnerAdapter spinnerAdapter = new StringSpinnerAdapter(this);
         spinnerAdapter.addItems(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.leagues))));
         mSpinnerLeague.setAdapter(spinnerAdapter);
+        mSpinnerLeague.setSelection(mPreferredLeague - 1);
         mSpinnerLeague.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

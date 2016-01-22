@@ -54,6 +54,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
     private Schedule mSchedule;
     private int mLastActiveDay;
     private int mLastSelectedDay;
+    private int mPreferredLeague;
 
     private Api mApi;
 
@@ -69,6 +70,8 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
         if (BuildConfig.USE_CRASHLYTICS) {
             Fabric.with(this, new Crashlytics());
         }
+
+        mPreferredLeague = PreferencesUtils.getPreferredLeague(this);
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.pages);
@@ -101,6 +104,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
         StringSpinnerAdapter spinnerAdapter = new StringSpinnerAdapter(this);
         spinnerAdapter.addItems(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.leagues))));
         mSpinnerLeague.setAdapter(spinnerAdapter);
+        mSpinnerLeague.setSelection(mPreferredLeague - 1);
         mSpinnerLeague.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

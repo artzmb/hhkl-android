@@ -57,7 +57,7 @@
         <item>2</item>
     </string-array>
     <string-array name="pref_values_preferred_league">
-        <item>League 1</item>
-        <item>League 2</item>
+        <item>1</item>
+        <item>2</item>
     </string-array>
 </resources>

@@ -6,16 +6,16 @@ import android.preference.PreferenceManager;
 
 public class PreferencesUtils {
 
-    private final static String KEY_PREFERRED_LEAGUE = "preferred_league";
-    private final static String KEY_API_URL = "api_url";
+    private final static String KEY_PREFERRED_LEAGUE = "pref_preferred_league";
+    private final static String KEY_API_URL = "pref_api_url";
 
     public static int getPreferredLeague(Context context) {
-        return getSharedPreferences(context).getInt(KEY_PREFERRED_LEAGUE, 0);
+        return Integer.parseInt(getSharedPreferences(context).getString(KEY_PREFERRED_LEAGUE, "1"));
     }
 
     public static void setPreferredLeague(Context context, int leagueLevel) {
         SharedPreferences.Editor editor = getEditor(context);
-        editor.putInt(KEY_PREFERRED_LEAGUE, leagueLevel);
+        editor.putString(KEY_PREFERRED_LEAGUE, String.valueOf(leagueLevel));
         editor.apply();
     }
 

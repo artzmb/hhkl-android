@@ -42,8 +42,8 @@ public class PlayersActivity extends BaseActivity {
     ViewFlipper mViewFlipper;
     Button mReloadButton;
 
-    private List<Player> mPlayers;
     private PlayersAdapter mPlayersAdapter;
+    private int mPreferredLeague;
 
     private Api mApi;
 
@@ -57,7 +57,7 @@ public class PlayersActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPlayers = MockDataGenerator.generatePlayers();
+        mPreferredLeague = PreferencesUtils.getPreferredLeague(this);
 
         mRecyclerViewPlayers = (RecyclerView) findViewById(R.id.players);
         mViewFlipper = (ViewFlipper) findViewById(R.id.flipper);
@@ -80,6 +80,10 @@ public class PlayersActivity extends BaseActivity {
 
     @SuppressWarnings("ConstantConditions")
     private void setupSpinner() {
+        StringSpinnerAdapter spinnerAdapter = new StringSpinnerAdapter(this);
+        spinnerAdapter.addItems(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.leagues))));
+        mSpinnerLeague.setAdapter(spinnerAdapter);
+        mSpinnerLeague.setSelection(mPreferredLeague - 1);
         mSpinnerLeague.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -92,9 +96,6 @@ public class PlayersActivity extends BaseActivity {
 
             }
         });
-        StringSpinnerAdapter spinnerAdapter = new StringSpinnerAdapter(this);
-        spinnerAdapter.addItems(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.leagues))));
-        mSpinnerLeague.setAdapter(spinnerAdapter);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
@@ -103,7 +104,6 @@ public class PlayersActivity extends BaseActivity {
         mRecyclerViewPlayers.addItemDecoration(new DividerItemDecoration(this, 1));
         mRecyclerViewPlayers.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewPlayers.setAdapter(mPlayersAdapter);
-        mPlayersAdapter.setItems(mPlayers);
     }
 
     private void setupViewFlipper() {
