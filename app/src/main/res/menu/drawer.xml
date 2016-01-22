@@ -11,6 +11,9 @@
         <item
             android:id="@+id/nav_players"
             android:title="@string/nav_players" />
+        <item
+            android:id="@+id/nav_preferences"
+            android:title="@string/nav_preferences" />
     </group>
 
 </menu>

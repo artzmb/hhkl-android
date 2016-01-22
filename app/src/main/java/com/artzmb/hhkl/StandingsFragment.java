@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ViewFlipper;
 
 import com.artzmb.hhkl.api.Api;
 import com.artzmb.hhkl.entity.DaysEntity;
@@ -18,6 +21,7 @@ import com.artzmb.hhkl.model.StandingsLine;
 import com.artzmb.hhkl.utils.Config;
 import com.artzmb.hhkl.utils.DataMapper;
 import com.artzmb.hhkl.utils.DividerItemDecoration;
+import com.artzmb.hhkl.utils.PreferencesUtils;
 import com.artzmb.hhkl.utils.StandingsAdapter;
 
 import java.util.List;
@@ -28,14 +32,23 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class StandingsFragment extends Fragment implements TableActivity.OnRequestListener {
+public class StandingsFragment extends Fragment
+        implements TableActivity.OnRequestListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String EXTRA_TYPE = "com.artzmb.hhkl.extra_type";
 
+    private static final int VIEW_LOADING = 0;
+    private static final int VIEW_ERROR = 1;
+    private static final int VIEW_DATA = 2;
+
     private String mTableType;
     private List<StandingsLine> mLines;
+    private int mLeagueLevel;
 
     RecyclerView mRecyclerViewStandings;
+    ViewFlipper mViewFlipper;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    Button mReloadButton;
 
     private StandingsAdapter mStandingsAdapter;
     private Api mApi;
@@ -61,11 +74,14 @@ public class StandingsFragment extends Fragment implements TableActivity.OnReque
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_standings, container, false);
+        mViewFlipper = (ViewFlipper) v.findViewById(R.id.flipper);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.refresh);
         mRecyclerViewStandings = (RecyclerView) v.findViewById(R.id.standings);
-        mRecyclerViewStandings.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerViewStandings.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-        mStandingsAdapter = new StandingsAdapter(getContext());
-        mRecyclerViewStandings.setAdapter(mStandingsAdapter);
+        mReloadButton = (Button) v.findViewById(R.id.reload);
+
+        setupStandings();
+        setupSwipeRefreshLayout();
+        setupViewFlipper();
         return v;
     }
 
@@ -90,15 +106,37 @@ public class StandingsFragment extends Fragment implements TableActivity.OnReque
 
     @Override
     public void onRequest(int leagueLevel) {
+        mLeagueLevel = leagueLevel;
+        mViewFlipper.setDisplayedChild(VIEW_LOADING);
         requestStandings(leagueLevel);
     }
 
     private void setupApi() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.API_URL)
+                .baseUrl(PreferencesUtils.getApiUrl(getActivity()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mApi = retrofit.create(Api.class);
+    }
+
+    private void setupStandings() {
+        mRecyclerViewStandings.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerViewStandings.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mStandingsAdapter = new StandingsAdapter(getContext());
+        mRecyclerViewStandings.setAdapter(mStandingsAdapter);
+    }
+
+    private void setupSwipeRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    private void setupViewFlipper() {
+        mReloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRequest(mLeagueLevel);
+            }
+        });
     }
 
     private void requestStandings(int leagueLevel) {
@@ -114,6 +152,10 @@ public class StandingsFragment extends Fragment implements TableActivity.OnReque
                             @Override
                             public void run() {
                                 setupMatches();
+                                mViewFlipper.setDisplayedChild(VIEW_DATA);
+                                if (mSwipeRefreshLayout.isRefreshing()) {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                }
                             }
                         }, 100);
                     }
@@ -122,12 +164,20 @@ public class StandingsFragment extends Fragment implements TableActivity.OnReque
 
             @Override
             public void onFailure(Throwable t) {
-
+                mViewFlipper.setDisplayedChild(VIEW_ERROR);
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
     }
 
     private void setupMatches() {
         mStandingsAdapter.setItems(mLines);
+    }
+
+    @Override
+    public void onRefresh() {
+        onRequest(mLeagueLevel);
     }
 }

@@ -46,4 +46,18 @@
     <string name="cancel_match_dialog_positive">Stop</string>
     <string name="match_already_completed">Match already completed</string>
     <string name="day_has_not_started_yet">Day has not started yet</string>
+    <string name="network_error">There is an error while loading data</string>
+    <string name="refresh">Refresh</string>
+    <string name="nav_preferences">Preferences</string>
+    <string name="common_preferences">Common</string>
+    <string name="pref_title_api_url">Server</string>
+    <string name="pref_title_preferred_league">Preferred League</string>
+    <string-array name="pref_entries_preferred_league">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="pref_values_preferred_league">
+        <item>League 1</item>
+        <item>League 2</item>
+    </string-array>
 </resources>

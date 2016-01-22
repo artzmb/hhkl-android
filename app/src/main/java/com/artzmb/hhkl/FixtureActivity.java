@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,24 +11,18 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.artzmb.hhkl.api.Api;
 import com.artzmb.hhkl.entity.DaysEntity;
-import com.artzmb.hhkl.entity.MatchEntity;
 import com.artzmb.hhkl.model.Schedule;
 import com.artzmb.hhkl.utils.Config;
 import com.artzmb.hhkl.utils.DataMapper;
+import com.artzmb.hhkl.utils.PreferencesUtils;
 import com.artzmb.hhkl.utils.StringSpinnerAdapter;
 
 import com.crashlytics.android.Crashlytics;
@@ -43,7 +35,6 @@ import retrofit.Retrofit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -56,10 +47,13 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
     Spinner mSpinnerLeague;
     ViewFlipper mViewFlipper;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    Button mReloadButton;
 
     private PagerAdapter mPagerAdapter;
 
     private Schedule mSchedule;
+    private int mLastActiveDay;
+    private int mLastSelectedDay;
 
     private Api mApi;
 
@@ -81,6 +75,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
         mSpinnerLeague = (Spinner) findViewById(R.id.spinner_league);
         mViewFlipper = (ViewFlipper) findViewById(R.id.flipper);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        mReloadButton = (Button) findViewById(R.id.reload);
 
         setupApi();
         setupSpinner();
@@ -95,7 +90,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
 
     private void setupApi() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.API_URL)
+                .baseUrl(PreferencesUtils.getApiUrl(getApplicationContext()))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mApi = retrofit.create(Api.class);
@@ -110,7 +105,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mViewFlipper.setDisplayedChild(VIEW_LOADING);
-                requestFixture(position + 1);
+                requestFixture(position + 1, false);
             }
 
             @Override
@@ -130,7 +125,7 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
             mTabLayout.addTab(mTabLayout.newTab());
         }
         mTabLayout.setupWithViewPager(mViewPager);
-
+        mViewPager.setCurrentItem(mLastActiveDay);
     }
 
     private void setupSwipeRefreshLayout() {
@@ -138,9 +133,16 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
     }
 
     private void setupViewFlipper() {
+        mReloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewFlipper.setDisplayedChild(VIEW_LOADING);
+                requestFixture(mSpinnerLeague.getSelectedItemPosition() + 1, false);
+            }
+        });
     }
 
-    private void requestFixture(int leagueLevel) {
+    private void requestFixture(int leagueLevel, final boolean saveSelectedDay) {
         Call<DaysEntity> call = mApi.getMatches(leagueLevel);
         call.enqueue(new Callback<DaysEntity>() {
             @Override
@@ -149,6 +151,16 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
                     @Override
                     public void run() {
                         mSchedule = DataMapper.transform(response.body());
+                        if (saveSelectedDay) {
+                            mLastActiveDay = mLastSelectedDay;
+                        } else {
+                            for (int i = mSchedule.getDays().size() - 1; i >= 0; i--) {
+                                if (mSchedule.getDays().get(i).isActive()) {
+                                    mLastActiveDay = i;
+                                    break;
+                                }
+                            }
+                        }
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -175,7 +187,8 @@ public class FixtureActivity extends BaseActivity implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
-        requestFixture(mSpinnerLeague.getSelectedItemPosition() + 1);
+        mLastSelectedDay = mTabLayout.getSelectedTabPosition();
+        requestFixture(mSpinnerLeague.getSelectedItemPosition() + 1, true);
     }
 
     private class DayPagerAdapter extends FragmentStatePagerAdapter {
